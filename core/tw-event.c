@@ -54,6 +54,12 @@ void tw_event_send(tw_event * event) {
             * transient messages on local sends so we can return.
             */
             tw_pq_enqueue(send_pe->pq, event);
+
+	    // DES-Metrics: capture event 
+	    fprintf(g_des_trace_json, "%s\n[\"%llu\",%g,\"%llu\",%g]",
+		    g_des_separator, src_lp->gid, tw_now(src_lp),
+		    event->dest_lp->gid, recv_ts);
+	    g_des_separator = ",";
             return;
         } else {
             /* Slower, but still local send, so put into top of

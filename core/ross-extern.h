@@ -56,6 +56,8 @@ extern tw_node g_tw_mynode;
 extern tw_node g_tw_masternode;
 
 extern FILE		*g_tw_csv;
+extern FILE             *g_des_trace_json;
+extern char             *g_des_separator;
 
 extern tw_lptype * g_tw_lp_types;
 extern tw_typemap_f g_tw_lp_typemap;

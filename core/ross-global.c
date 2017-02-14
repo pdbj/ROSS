@@ -94,7 +94,8 @@ tw_node		g_tw_mynode = -1;
 tw_node		g_tw_masternode = -1;
 
 FILE		*g_tw_csv = NULL;
-
+FILE            *g_des_trace_json;
+char            *g_des_separator;
 
 /*
  *

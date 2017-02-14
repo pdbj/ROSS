@@ -39,4 +39,6 @@ extern void tw_opt_print(void);
 /** Pretty-print the option descriptions and current values */
 extern void tw_opt_settings(FILE *f);
 
+/** Print model name to DES-Metrics trace file */
+extern void des_print_model_name(void);
 #endif

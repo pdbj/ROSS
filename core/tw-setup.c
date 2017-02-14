@@ -34,13 +34,35 @@ void tw_init(int *argc, char ***argv) {
 
     tw_opt_add(tw_net_init(argc, argv));
 
+    // DES-Metrics: setup trace file and print header information */
+    {
+      g_des_trace_json = fopen("desTraceFile.json", "w+");
+	
+      fprintf(g_des_trace_json, "{\n\"simulator_name\" : \"ROSS Revision: %s\",\n",
+	      ROSS_VERSION);
+      fprintf(g_des_trace_json, "\"model_name\" : \"");
+      des_print_model_name();
+      fprintf(g_des_trace_json, "\",\n");
+      time_t current_time;
+      time(&current_time);
+      char *ascii_time = ctime(&current_time);
+      fprintf(g_des_trace_json, "\"capture_date\" : \"%.*s\",\n",
+	      strlen(ascii_time)-1, ascii_time);
+      fprintf(g_des_trace_json, "\"command_line_arguments\" : \"");
+    }
+
     // Print out the command-line so we know what we passed in
     if (tw_ismaster()) {
         for (i = 0; i < *argc; i++) {
             printf("%s ", (*argv)[i]);
+	    fprintf(g_des_trace_json, " %s ", (*argv)[i]);
         }
         printf("\n\n");
     }
+
+    // Open array for capturing events exchanged in the simulation.
+    fprintf(g_des_trace_json,"\",\n\"events\" : [");
+    g_des_separator = " ";
 
     // Print our revision if we have it
 #ifdef ROSS_VERSION
@@ -377,6 +399,10 @@ void tw_end(void) {
     }
 
     tw_net_stop();
+
+    // Print end event array marker and end json file marker 
+    fprintf(g_des_trace_json, "\n]\n}\n");
+    fclose(g_des_trace_json);
 }
 
 /**
